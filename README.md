@@ -2,7 +2,7 @@
 
 A personal workbench for robotics projects. Add a build, record parts and test notes, and move it through **Planned**, **Building**, **Testing**, and **Complete**. The browser board and REST API share the same SQLite records.
 
-After starting Flask, open [the project board](http://127.0.0.1:5050/). Create an account or sign in, then select **Add project**. Select a project card to edit its notes or move it to another stage. Changes persist when you sign out.
+After starting Flask, open [the project board](http://127.0.0.1:5050/). Create an account or sign in, then select **Add project**. Drag a card to another column to change its stage, or select it to edit its notes or delete it. Use the search box to filter by name or notes, and press **N** to add a project. Changes persist when you sign out.
 
 ## Ownership in SQLite
 

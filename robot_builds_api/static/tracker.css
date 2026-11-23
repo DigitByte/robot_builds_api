@@ -1,30 +1,132 @@
-:root {font: 16px/1.5 "IBM Plex Sans", "Inter", system-ui, sans-serif; color: #1e3339; background: #f5f6f1;}
+:root {
+  --bg: #111113;
+  --surface: #19191c;
+  --raised: #212125;
+  --line: #2c2c31;
+  --line-strong: #3a3a40;
+  --text: #ededed;
+  --muted: #8e8e96;
+  --error: #f08a7e;
+  --planned: #8e8e96;
+  --building: #d9a65b;
+  --testing: #7fa8c9;
+  --complete: #7dbb93;
+  --radius: 10px;
+  font: 15px/1.5 "IBM Plex Sans", "Inter", system-ui, sans-serif;
+  color: var(--text);
+  background: var(--bg);
+}
+
 * {box-sizing: border-box;}
-body {margin: 0;}
-header, .heading, .actions, .lane h2 {display: flex; align-items: center; justify-content: space-between; gap: 1rem;}
-header {background: #18353a; color: #eff8f1; padding: 1rem 5vw; min-height: 4.4rem;}
-main {max-width: 100rem; margin: 0 auto; padding: 3rem 5vw;}
-h1 {font-size: clamp(2rem, 4vw, 3.2rem); line-height: 1.1; letter-spacing: -.045em; margin: .5rem 0 1rem;}
-#account, dialog {background: white; border: 1px solid #cbd4ce; border-radius: .65rem; padding: clamp(1.4rem, 4vw, 3rem); width: min(100%, 31rem);}
-#account {margin: 4vh auto;}
-form, label, .cards {display: grid; gap: .75rem;}
-label {font-weight: 600; gap: .3rem;}
+[hidden] {display: none !important;}
+body {margin: 0; min-height: 100vh; background: var(--bg);}
+h1, h2 {margin: 0; font-weight: 600;}
+h1 {font-size: clamp(1.8rem, 3.5vw, 2.6rem); letter-spacing: -.03em; line-height: 1.1;}
+.muted {color: var(--muted);}
+.small {font-size: .85rem;}
+.eyebrow {margin: 0 0 .4rem; font: 600 .72rem/1 ui-monospace, "IBM Plex Mono", monospace; letter-spacing: .14em; text-transform: uppercase; color: var(--muted);}
+.error {color: var(--error); margin: 0;}
+.error:empty {display: none;}
+.visually-hidden {position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap;}
+
+.topbar {
+  position: sticky; top: 0; z-index: 5;
+  display: flex; align-items: center; justify-content: space-between;
+  padding: .9rem 5vw; border-bottom: 1px solid var(--line);
+  background: rgba(17, 17, 19, .85); backdrop-filter: blur(8px);
+}
+.brand {display: flex; align-items: center; gap: .6rem; font-weight: 600; letter-spacing: -.01em;}
+.mark {width: .7rem; height: .7rem; border-radius: 2px; background: var(--text);}
+
+main {max-width: 96rem; margin: 0 auto; padding: 2.5rem 5vw 4rem;}
+
+.panel, dialog {
+  background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius);
+  padding: clamp(1.4rem, 4vw, 2.5rem); color: var(--text);
+}
+#account {width: min(100%, 28rem); margin: 8vh auto; display: grid; gap: 1rem;}
+#account > p {margin: 0;}
+
+form, label {display: grid; gap: .8rem;}
+label {gap: .35rem; font-size: .85rem; font-weight: 500; color: var(--muted);}
 input, textarea, select, button {font: inherit;}
-input, select, textarea {border: 1px solid #889995; padding: .6rem; border-radius: .35rem; width: 100%; background: white; color: inherit;}
+input, select, textarea {
+  width: 100%; padding: .6rem .7rem; border-radius: 7px;
+  border: 1px solid var(--line-strong); background: var(--bg); color: var(--text);
+}
+input:focus, select:focus, textarea:focus {outline: none; border-color: var(--text);}
 textarea {resize: vertical;}
-button {cursor: pointer; border: 1px solid transparent; border-radius: .35rem; padding: .55rem .9rem; background: #195c4c; color: white; font-weight: 600;}
-button.secondary {background: #fff; color: #24473e; border-color: #adbeb7;}
-button:hover {filter: brightness(.93);}
-.actions {justify-content: flex-start; flex-wrap: wrap;}
-#board {margin-top: 1.5rem; display: grid; gap: 1rem; grid-template-columns: repeat(auto-fit,minmax(min(100%,15rem),1fr));}
-.lane {background: #e9ede6; border-top: .3rem solid #768881; padding: 1rem; border-radius: .3rem; min-height: 12rem;}
-.lane:nth-child(2) {border-color: #b47a32;}
-.lane:nth-child(3) {border-color: #497c98;}
-.lane:nth-child(4) {border-color: #397b55;}
-.lane h2 {font-size: 1rem; margin: 0 0 1rem;}
-.count {font-family: monospace;}
-.card {text-align: left; color: inherit; background: white; border: 1px solid #c7d2cb; overflow-wrap: anywhere;}
-.card small {display: block; white-space: pre-wrap; font-weight: normal; margin-top: .4rem;}
-dialog::backdrop {background: #102c3399;}
-#message, #form-error {color: #91391d;}
-#form-error:empty {display: none;}
+::placeholder {color: #66666d;}
+
+button {
+  cursor: pointer; padding: .55rem 1rem; border-radius: 7px; font-weight: 600;
+  border: 1px solid var(--text); background: var(--text); color: var(--bg);
+  transition: background .15s, border-color .15s, color .15s;
+}
+button:hover {background: #ffffff;}
+button:focus-visible, .card:focus-visible {outline: 2px solid var(--text); outline-offset: 2px;}
+button:disabled {opacity: .55; cursor: progress;}
+button.ghost {background: transparent; color: var(--text); border-color: var(--line-strong);}
+button.ghost:hover {border-color: var(--text);}
+button.danger {background: transparent; color: var(--error); border-color: transparent; margin-left: auto;}
+button.danger:hover {border-color: var(--error);}
+button.danger.confirm {background: var(--error); color: var(--bg);}
+.actions {display: flex; flex-wrap: wrap; gap: .6rem; margin-top: .4rem;}
+
+.overview {display: flex; flex-wrap: wrap; align-items: end; justify-content: space-between; gap: 1.5rem;}
+.stats {display: flex; gap: 2rem; margin: 0;}
+.stats div {display: grid; gap: .15rem;}
+.stats dt {font-size: .75rem; color: var(--muted); text-transform: uppercase; letter-spacing: .1em;}
+.stats dd {margin: 0; font: 600 1.4rem/1 ui-monospace, "IBM Plex Mono", monospace;}
+.progress {height: 3px; margin: 1.5rem 0; border-radius: 3px; background: var(--line); overflow: hidden;}
+.progress span {display: block; height: 100%; width: 0; background: var(--complete); transition: width .4s ease;}
+
+.toolbar {display: flex; gap: .75rem; margin-bottom: 1.25rem;}
+.search {flex: 1; max-width: 26rem;}
+
+#board {display: grid; gap: 1rem; grid-template-columns: repeat(auto-fit, minmax(min(100%, 16rem), 1fr)); align-items: start;}
+.lane {
+  --accent: var(--planned);
+  background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius);
+  padding: .9rem; min-height: 14rem; transition: border-color .15s, background .15s;
+}
+.lane[data-stage="Building"] {--accent: var(--building);}
+.lane[data-stage="Testing"] {--accent: var(--testing);}
+.lane[data-stage="Complete"] {--accent: var(--complete);}
+.lane.drop {border-color: var(--accent); background: var(--raised);}
+.lane h2 {display: flex; align-items: center; gap: .5rem; font-size: .9rem; margin-bottom: .9rem;}
+.dot {width: .5rem; height: .5rem; border-radius: 50%; background: var(--accent);}
+.count {margin-left: auto; font: .8rem ui-monospace, monospace; color: var(--muted); background: var(--bg); padding: .1rem .5rem; border-radius: 99px;}
+.cards {display: grid; gap: .6rem;}
+.empty {margin: 1.5rem 0; text-align: center; font-size: .85rem; color: #5d5d64;}
+.lane:has(.card) .empty {display: none;}
+
+.card {
+  display: grid; gap: .35rem; width: 100%; text-align: left; cursor: pointer;
+  padding: .8rem .9rem; border-radius: 8px; font-weight: 400;
+  background: var(--raised); color: var(--text); border: 1px solid var(--line);
+  border-left: 3px solid var(--accent); overflow-wrap: anywhere;
+}
+.card:hover {background: #26262b; border-color: var(--line-strong); border-left-color: var(--accent);}
+.card.dragging {opacity: .4;}
+.card strong {font-weight: 600;}
+.card .notes {
+  color: var(--muted); font-size: .85rem; white-space: pre-wrap;
+  display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden;
+}
+.card time {font: .72rem ui-monospace, monospace; color: #6c6c73;}
+.hint {font-size: .8rem; margin-top: 1rem;}
+
+dialog {width: min(92vw, 32rem);}
+dialog h2 {font-size: 1.2rem; margin-bottom: .3rem;}
+dialog::backdrop {background: rgba(0, 0, 0, .65); backdrop-filter: blur(2px);}
+#form-meta:empty {display: none;}
+#form-meta {margin: 0;}
+
+#message {max-width: 28rem; margin: 1rem auto 0; text-align: center;}
+
+@media (max-width: 560px) {
+  .stats {gap: 1.2rem;}
+  .toolbar {flex-direction: column;}
+  .search {max-width: none;}
+}
