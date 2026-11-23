@@ -19,11 +19,15 @@ class User(db.Model):
         return check_password_hash(self.password_hash, password)
 
 
+BUILD_STAGES = ("Planned", "Building", "Testing", "Complete")
+
+
 class RobotBuild(db.Model):
     __tablename__ = "robot_builds"
 
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(255), nullable=False)
+    stage = db.Column(db.String(20), nullable=False, server_default="Planned")
     description = db.Column(db.Text)
     user_id = db.Column(
         db.Integer, db.ForeignKey("users.id"), nullable=False, index=True

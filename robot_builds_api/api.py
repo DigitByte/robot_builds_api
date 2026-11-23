@@ -1,11 +1,16 @@
-from flask import Blueprint, g, request
+from flask import Blueprint, g, render_template, request
 from sqlalchemy.exc import IntegrityError
 
 from .auth_utils import error, issue_token, require_auth
 from .extensions import db
-from .models import RobotBuild, User
+from .models import BUILD_STAGES, RobotBuild, User
 
 api = Blueprint("api", __name__)
+
+
+@api.get("/")
+def tracker():
+    return render_template("tracker.html", stages=BUILD_STAGES)
 
 
 def payload():
@@ -118,6 +123,7 @@ def build_json(build):
         "id": build.id,
         "name": build.name,
         "description": build.description,
+        "stage": build.stage,
         "user_id": build.user_id,
         "created_at": build.created_at.isoformat() + "Z",
     }
@@ -126,21 +132,25 @@ def build_json(build):
 def save_build(build, creating=False):
     data = payload()
     fields = {
-        key: "Field cannot be set." for key in data.keys() - {"name", "description"}
+        key: "Field cannot be set." for key in data.keys() - {"name", "description", "stage"}
     }
     name = clean_string(data.get("name"), 255)
     if (creating or "name" in data) and name is None:
         fields["name"] = "Enter a name between 1 and 255 characters."
     if data.get("description") is not None and not isinstance(data["description"], str):
         fields["description"] = "Enter text or null."
+    if "stage" in data and data["stage"] not in BUILD_STAGES:
+        fields["stage"] = "Choose a valid project stage."
     if not data and not creating:
-        fields["body"] = "Supply a name or description."
+        fields["body"] = "Supply a name, description, or stage."
     if fields:
         return invalid("Invalid build data.", fields)
     if name is not None:
         build.name = name
     if "description" in data:
         build.description = data["description"]
+    if "stage" in data:
+        build.stage = data["stage"]
     if creating:
         db.session.add(build)
     db.session.commit()

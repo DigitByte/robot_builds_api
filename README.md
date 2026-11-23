@@ -1,6 +1,8 @@
-# Robot Builds API
+# Robot Project Tracker
 
-A Flask API for keeping a developer's robotics projects together. Each build has a name, an optional description, and an owner. SQLite stores the accounts and builds. Alembic tracks the database schema.
+A personal workbench for robotics projects. Add a build, record parts and test notes, and move it through **Planned**, **Building**, **Testing**, and **Complete**. The browser board and REST API share the same SQLite records.
+
+After starting Flask, open [the project board](http://127.0.0.1:5050/). Create an account or sign in, then select **Add project**. Select a project card to edit its notes or move it to another stage. Changes persist when you sign out.
 
 ## Ownership in SQLite
 
@@ -29,7 +31,7 @@ The development server listens at `http://127.0.0.1:5050`. Keep the same secret 
 | `JWT_ACCESS_LIFETIME_MINUTES` | Positive integer access-token lifetime | `15` |
 | `DATABASE_URL` | SQLAlchemy connection URI | `sqlite:///robot_builds.db` (under `instance/`) |
 
-Use `flask --app robot_builds_api db current` to see the installed revision and `flask --app robot_builds_api db check` to check the models against the migrated database. For future schema changes, generate a revision with `db migrate -m "Describe the change"`, inspect it, and then run `db upgrade`. Revision `0001` initializes a fresh database. An existing unversioned database needs a migration tailored to its schema and verified owner IDs before adoption.
+Use `flask --app robot_builds_api db current` to see the installed revision and `flask --app robot_builds_api db check` to check the models against the migrated database. For future schema changes, generate a revision with `db migrate -m "Describe the change"`, inspect it, and then run `db upgrade`. Revision `0001` initializes a fresh database. Revision `0002` adds the project stage and places existing builds in Planned. An existing unversioned database needs a migration tailored to its schema and verified owner IDs before adoption.
 
 ## Authentication and permissions
 
@@ -53,9 +55,9 @@ Send JSON request bodies with `Content-Type: application/json`. Protected routes
 | PATCH, PUT | `/me` | Signed in | Supply only `email`. Returns the updated profile. |
 | GET | `/admin/ping` | Admin | Returns `{"message":"pong"}`. |
 | GET | `/robot-builds` | Signed in | Returns accessible builds in `robot_builds`, ordered by ID. |
-| POST | `/robot-builds` | Signed in | Supply `name` and optional `description`. Returns the new `robot_build` (201). |
+| POST | `/robot-builds` | Signed in | Supply `name` and optional `description` and `stage`. Returns the new `robot_build` (201). |
 | GET | `/robot-builds/<id>` | Owner or admin | Returns one `robot_build`. |
-| PATCH | `/robot-builds/<id>` | Owner or admin | Edit name or description. Send a null description to clear it. |
+| PATCH | `/robot-builds/<id>` | Owner or admin | Edit name, description, or stage. Send a null description to clear it. |
 | DELETE | `/robot-builds/<id>` | Owner or admin | Deletes the build (204, empty body). |
 
 Email and build names are trimmed and accept 1–255 characters. Emails are case-sensitive. Passwords accept 8–128 characters. The service assigns ownership from the authenticated account and rejects attempts to set or transfer ownership in build requests.
@@ -89,4 +91,4 @@ Each test migrates a temporary SQLite database. Coverage includes password hashi
 
 ## Scope
 
-This is a local portfolio API. Tokens expire after the configured lifetime. There is no refresh or logout endpoint. The build list is unpaginated, and the development server is intended for local use.
+This tracker runs locally. Tokens expire after the configured lifetime. There is no refresh or logout endpoint. The build list is unpaginated, and the development server is intended for local use.

@@ -1,0 +1,30 @@
+:root {font: 16px/1.5 "IBM Plex Sans", "Inter", system-ui, sans-serif; color: #1e3339; background: #f5f6f1;}
+* {box-sizing: border-box;}
+body {margin: 0;}
+header, .heading, .actions, .lane h2 {display: flex; align-items: center; justify-content: space-between; gap: 1rem;}
+header {background: #18353a; color: #eff8f1; padding: 1rem 5vw; min-height: 4.4rem;}
+main {max-width: 100rem; margin: 0 auto; padding: 3rem 5vw;}
+h1 {font-size: clamp(2rem, 4vw, 3.2rem); line-height: 1.1; letter-spacing: -.045em; margin: .5rem 0 1rem;}
+#account, dialog {background: white; border: 1px solid #cbd4ce; border-radius: .65rem; padding: clamp(1.4rem, 4vw, 3rem); width: min(100%, 31rem);}
+#account {margin: 4vh auto;}
+form, label, .cards {display: grid; gap: .75rem;}
+label {font-weight: 600; gap: .3rem;}
+input, textarea, select, button {font: inherit;}
+input, select, textarea {border: 1px solid #889995; padding: .6rem; border-radius: .35rem; width: 100%; background: white; color: inherit;}
+textarea {resize: vertical;}
+button {cursor: pointer; border: 1px solid transparent; border-radius: .35rem; padding: .55rem .9rem; background: #195c4c; color: white; font-weight: 600;}
+button.secondary {background: #fff; color: #24473e; border-color: #adbeb7;}
+button:hover {filter: brightness(.93);}
+.actions {justify-content: flex-start; flex-wrap: wrap;}
+#board {margin-top: 1.5rem; display: grid; gap: 1rem; grid-template-columns: repeat(auto-fit,minmax(min(100%,15rem),1fr));}
+.lane {background: #e9ede6; border-top: .3rem solid #768881; padding: 1rem; border-radius: .3rem; min-height: 12rem;}
+.lane:nth-child(2) {border-color: #b47a32;}
+.lane:nth-child(3) {border-color: #497c98;}
+.lane:nth-child(4) {border-color: #397b55;}
+.lane h2 {font-size: 1rem; margin: 0 0 1rem;}
+.count {font-family: monospace;}
+.card {text-align: left; color: inherit; background: white; border: 1px solid #c7d2cb; overflow-wrap: anywhere;}
+.card small {display: block; white-space: pre-wrap; font-weight: normal; margin-top: .4rem;}
+dialog::backdrop {background: #102c3399;}
+#message, #form-error {color: #91391d;}
+#form-error:empty {display: none;}

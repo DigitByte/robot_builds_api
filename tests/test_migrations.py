@@ -9,7 +9,7 @@ from robot_builds_api.extensions import db
 def test_migrated_schema(app):
     with app.app_context():
         assert (
-            db.session.scalar(text("SELECT version_num FROM alembic_version")) == "0001"
+            db.session.scalar(text("SELECT version_num FROM alembic_version")) == "0002"
         )
         assert db.session.scalar(text("PRAGMA foreign_keys")) == 1
         (fk,) = inspect(db.engine).get_foreign_keys("robot_builds")

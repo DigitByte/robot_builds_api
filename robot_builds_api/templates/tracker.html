@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Robot project tracker</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='tracker.css') }}">
+  <script defer src="{{ url_for('static', filename='tracker.js') }}"></script>
+</head>
+<body>
+  <header><strong>Robot project tracker</strong><button id="logout" class="secondary" hidden>Sign out</button></header>
+  <main>
+    <section id="account">
+      <h1>Your workbench</h1>
+      <p>Sign in to track your robot builds from planning through testing.</p>
+      <form id="login">
+        <label>Email<input type="email" name="email" autocomplete="username" required maxlength="255"></label>
+        <label>Password<input type="password" name="password" autocomplete="current-password" required minlength="8" maxlength="128"></label>
+        <div class="actions"><button>Sign in</button><button class="secondary" value="register">Create account</button></div>
+      </form>
+    </section>
+    <section id="projects" hidden>
+      <div class="heading"><h1>Project board</h1><button id="add">Add project</button></div>
+      <div id="board">
+        {% for stage in stages %}
+        <section class="lane" data-stage="{{ stage }}"><h2>{{ stage }} <span class="count"></span></h2><div class="cards"></div></section>
+        {% endfor %}
+      </div>
+    </section>
+    <p id="message" role="status"></p>
+    <dialog id="editor">
+      <form id="project-form">
+        <h2 id="form-title">Add project</h2>
+        <label>Project name<input name="name" maxlength="255" required></label>
+        <label>Stage<select name="stage">{% for stage in stages %}<option>{{ stage }}</option>{% endfor %}</select></label>
+        <label>Build notes<textarea name="description" rows="5" placeholder="Parts, test results, or the next thing to try"></textarea></label>
+        <p id="form-error" role="alert"></p>
+        <div class="actions"><button>Save project</button><button class="secondary" type="button" id="cancel">Cancel</button></div>
+      </form>
+    </dialog>
+  </main>
+</body>
+</html>

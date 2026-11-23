@@ -37,3 +37,16 @@ def test_owner_and_admin_access(client, account, app):
     )
     assert client.delete(path, headers=guest).status_code == 204
     assert client.get(path, headers=auth).status_code == 404
+
+
+def test_track_project_through_stages(client, account):
+    _, headers = account()
+    created = client.post("/robot-builds", headers=headers, json={"name": "Crawler"})
+    project = created.json["robot_build"]
+    assert project["stage"] == "Planned"
+    path = f"/robot-builds/{project['id']}"
+    for stage in ["Building", "Testing", "Complete"]:
+        assert client.patch(path, headers=headers, json={"stage": stage}).status_code == 200
+        assert client.get("/robot-builds", headers=headers).json["robot_builds"][0]["stage"] == stage
+    assert client.patch(path, headers=headers, json={"stage": "Unknown"}).status_code == 400
+    assert client.get(path, headers=headers).json["robot_build"]["stage"] == "Complete"
